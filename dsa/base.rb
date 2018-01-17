@@ -105,8 +105,6 @@ module MyExample
       def inspect
         "\#<GF #{@n} mod #{self.class::P}>"
       end
-      # べき乗のサポート
-      include Power
     }
   end
 

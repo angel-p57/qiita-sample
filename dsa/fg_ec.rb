@@ -10,7 +10,7 @@ module MyExample
         gfclass=GaloisField.generate(p_)
         a,b=gfclass.new(a),gfclass.new(b)
         # y=0の場合のxの3次方程式の重解条件を除外
-        raise ArgumentError("4a^3+27b^2 should not be zero in mod p") if a**3*4+b**2*27==0
+        raise ArgumentError("4a^3+27b^2 should not be zero in mod p") if a*a*a*4+b*b*27==0
         Class.new(@@base).tap{|c|
           c.const_set(:GF,gfclass)
           c.const_set(:A,a)
@@ -34,7 +34,7 @@ module MyExample
         # newのラッパー、曲線上にある座標のみを受け付ける
         def self.element(x,y)
           x,y=self::GF.new(x),self::GF.new(y)
-          y**2==x**3+self::A*x+self::B ? new(x,y) : nil
+          y*y==x*x*x+self::A*x+self::B ? new(x,y) : nil
         end
         private_class_method :new
         attr_reader :x,:y
@@ -50,7 +50,7 @@ module MyExample
           return self if elem.infinity?
           return INFINITY if @x==elem.x&&@y+elem.y==0
           # 同一要素 ( 2倍算 ) かどうかに応じて直線の傾き u の計算式を切り替える
-          u=@x==elem.x ? (@x**2*3+self.class::A)/(@y*2) : (@y-elem.y)/(@x-elem.x)
+          u=@x==elem.x ? (@x*@x*3+self.class::A)/(@y*2) : (@y-elem.y)/(@x-elem.x)
           x=u*u-@x-elem.x
           y=(@x-x)*u-@y
           # 曲線上にあるかどうかのチェックを省いて直にオブジェクトを生成する
