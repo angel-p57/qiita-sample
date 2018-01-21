@@ -1,18 +1,15 @@
 require "./base.rb"
 module MyExample
   module FiniteGroup
-    # GF(p)における楕円曲線
+    # 何らかの GF における楕円曲線
     module EllipticCurve
-      # p,a,bを元に、y^2=x^3+ax+b mod p の楕円曲線を提供するクラスを生成
-      def generate(p_,a,b)
-        # 4k+3型素数pは除外
-        raise ArgumentError("p should be a 4k+1 type prime number") if p_%4!=1
-        gfclass=GaloisField.generate(p_)
-        a,b=gfclass.new(a),gfclass.new(b)
+      # a,bを元に、GF上で y^2=x^3+ax+b の楕円曲線を提供するクラスを生成
+      def generate(gf,a,b)
+        a,b=gf.new(a),gf.new(b)
         # y=0の場合のxの3次方程式の重解条件を除外
         raise ArgumentError.new("4a^3+27b^2 should not be zero in mod p") if a*a*a*4+b*b*27==0
         Class.new(@@base).tap{|c|
-          c.const_set(:GF,gfclass)
+          c.const_set(:GF,gf)
           c.const_set(:A,a)
           c.const_set(:B,b)
         }
