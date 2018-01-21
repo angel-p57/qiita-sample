@@ -1,48 +1,31 @@
 module MyExample
-  # バイナリ法によるべき乗機能を追加するmixin
-  module Power
-    # 追加対象のクラスの制約条件、演算 * と単位元 identity の存在
-    def self.included(c)
-      raise TypeError.new("class #{c} does not have '*' instance method") unless c.method_defined?(:*)
-      raise TypeError.new("class #{c} does not have 'identity' class method") unless c.singleton_class.method_defined?(:identity)
-    end
-    # 自乗/二乗
-    def square
-      self*self
-    end
-    # べき乗
-    def **(r)
-      raise ArgumentError.new("negative exponent is not allowed") if r.to_i<0
-      pow_impl(r.to_i)
-    end
-    # べき乗の実装 ( バイナリ法 )
-    def pow_impl(r)
-      case r
-      when 0; self.class.identity
-      when 1; self
-      else;   r.even? ? pow_impl(r/2).square : pow_impl(r/2).square*self
-      end
-    end
-    private :pow_impl
-  end
-
-  # 有限群の抽象基底クラス
+  # 有限群の共通機能
   module FiniteGroup
-    class Base
-      def ==(elem)
-        raise NotImplementedError
+    # バイナリ法によるべき乗機能を追加するmixin
+    module Common
+      # 追加対象のクラスの制約条件、演算 * と単位元 epsilon の存在
+      def self.included(c)
+        raise TypeError.new("class #{c} does not have '*' instance method") unless c.method_defined?(:*)
+        raise TypeError.new("class #{c} does not have 'epsilon' class method") unless c.singleton_class.method_defined?(:epsilon)
       end
-      def *(elem)
-        raise NotImplementedError
+      # 自乗/二乗
+      def square
+        self*self
       end
-      def self.epsilon
-        raise NotImplementedError
+      # べき乗
+      def **(r)
+        raise ArgumentError.new("negative exponent is not allowed") if r.to_i<0
+        pow_impl(r.to_i)
       end
-      def self.identity
-        epsilon
+      # べき乗の実装 ( バイナリ法 )
+      def pow_impl(r)
+        case r
+        when 0; self.class.epsilon
+        when 1; self
+        else;   r.even? ? pow_impl(r/2).square : pow_impl(r/2).square*self
+        end
       end
-      # べき乗のサポート
-      include Power
+      private :pow_impl
     end
   end
 
@@ -60,10 +43,6 @@ module MyExample
       # mod p の値を内部的に持つ
       def initialize(n)
         @n=n.to_i%self.class::P
-      end
-      # 単位元
-      def self.identity
-        new(1)
       end
       # 0 以外をランダムに選ぶ
       def self.rand
@@ -93,7 +72,7 @@ module MyExample
       end
       # 比較演算
       def ==(elem)
-        (self-elem).to_i==0
+        to_i==elem.to_i
       end
       # データ変換
       def to_i

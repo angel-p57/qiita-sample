@@ -19,7 +19,7 @@ module MyExample
       end
       module_function :generate
       # 楕円曲線の基底
-      @@base=Class.new(Base){|c|
+      @@base=Class.new{|c|
         # 無限遠点はユニークなインスタンスとして扱う
         INFINITY=new
         def self.infinity
@@ -65,6 +65,7 @@ module MyExample
             "\#<EC infinity>" :
             "\#<EC (#{@x},#{@y}) on y^2=x^3+#{self.class::A}x+#{self.class::B} mod #{self.class::GF::P}>"
         end
+        include Common
       }
     end
   end
