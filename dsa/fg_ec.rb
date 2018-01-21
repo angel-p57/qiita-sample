@@ -10,7 +10,7 @@ module MyExample
         gfclass=GaloisField.generate(p_)
         a,b=gfclass.new(a),gfclass.new(b)
         # y=0の場合のxの3次方程式の重解条件を除外
-        raise ArgumentError("4a^3+27b^2 should not be zero in mod p") if a*a*a*4+b*b*27==0
+        raise ArgumentError.new("4a^3+27b^2 should not be zero in mod p") if a*a*a*4+b*b*27==0
         Class.new(@@base).tap{|c|
           c.const_set(:GF,gfclass)
           c.const_set(:A,a)

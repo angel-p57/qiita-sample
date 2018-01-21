@@ -34,7 +34,7 @@ module MyExample
     require "prime"
     # 素数 p に対応する有限体クラスを生成する
     def generate(p_)
-      raise ArgumentError("p=#{p_} is not prime") unless p_.prime?
+      raise ArgumentError.new("p=#{p_} is not prime") unless p_.prime?
       Class.new(@@base).tap{|c| c.const_set(:P,p_) }
     end
     module_function :generate
