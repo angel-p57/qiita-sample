@@ -10,14 +10,20 @@ module MyExample
       @fz=->msg{ gfq.new(fz[msg]) }
       @fp=->gelem{ gfq.new(fp[gelem]) }
       if @debug_enable
-        puts "** DSA engine initialized with gamma=#{gamma}, q=#{gfq::P} **"
+        puts "  ** debug: initialize",
+             "    DSA engine initialized with;",
+             "    gamma=#{gamma}, q=#{gfq::P}",
+             ""
       end
     end
     def create_key_pair(rval=nil)
       x = rval||@gfq.rand
       ki = @gamma**x
       if @debug_enable
-        puts "** created private key x: #{x}, public key ki=gamma**x: #{ki} **"
+        puts "  ** debug: create_key_pair",
+             "    created private key x: #{x},",
+             "            public key ki=gamma**x: #{ki}",
+             ""
       end
       [x,ki]
     end
@@ -28,9 +34,11 @@ module MyExample
       r = @fp[omega]
       s = (z+x*r)/k
       if @debug_enable
-        puts "** hash of msg ( #{msg} ) is #{z} **"
-        puts "** random value k=#{k} selected, and gamma**k=#{omega} **"
-        puts "** signature is the pair of (r,s)=(#{r},#{s}) **"
+        puts "  ** debug: make_signature",
+             "    hash of msg ( #{msg} ) is #{z}",
+             "    random value k=#{k} selected, and gamma**k=#{omega}",
+             "    signature (r,s)=(#{r},#{s})",
+             ""
       end
       [r,s]
     end
@@ -41,11 +49,13 @@ module MyExample
       omega=@gamma**u1*ki**u2
       rd = @fp[omega]
       if @debug_enable
-        puts "** hash of msg ( #{msg} ) is #{z} **"
-        puts "** signature is the pair of (r,s)=(#{r},#{s}) **"
-        puts "** calculated u1=#{u1},u2=#{u2} **"
-        puts "** gamma**u1*ki**u2=#{omega} **"
-        puts "** now r(derived)=#{rd}, which #{rd==r ? 'matches' : 'does not match'} r **"
+        puts "  ** debug: verify_signature",
+             "    hash of msg ( #{msg} ) is #{z}",
+             "    signature (r,s)=(#{r},#{s})",
+             "    calculated u1=#{u1},u2=#{u2}",
+             "    gamma**u1*ki**u2=#{omega}",
+             "    now r(derived)=#{rd}, which #{rd==r ? 'matches' : 'does not match'} r",
+             ""
       end
       rd==r
     end
