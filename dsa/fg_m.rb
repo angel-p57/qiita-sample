@@ -6,6 +6,10 @@ module MyExample
       # 素数に対応する GF(p) の乗法群としての機能のみを利用するクラスの生成
       def generate(p_)
         Class.new(GaloisField.generate(p_)){|c|
+          def initialize(n)
+            raise ArgumentError.new("0 is not allowed") if n%self.class::P==0
+            super
+          end
           def self.epsilon
             new(1)
           end
