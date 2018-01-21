@@ -13,13 +13,13 @@ mydsa=MyExample::DSAEngine.new(
 )
 
 # DSA demonstration
-x,ki=mydsa.create_key_pair
+x,chi=mydsa.create_key_pair
 r,s=mydsa.make_signature("hoge",x)
 puts "verify the signature with a same message:"
-puts mydsa.verify_signature("hoge",r,s,ki) ? "verify O.K." : "verify N.G."
+puts mydsa.verify_signature("hoge",r,s,chi) ? "verify O.K." : "verify N.G."
 puts
 puts "next, verify the signature with another message:"
-puts mydsa.verify_signature("uge",r,s,ki) ? "verify O.K." : "verify N.G."
+puts mydsa.verify_signature("uge",r,s,chi) ? "verify O.K." : "verify N.G."
 puts
 
 puts "what if fixed k used?"

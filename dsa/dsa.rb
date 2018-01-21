@@ -18,14 +18,14 @@ module MyExample
     end
     def create_key_pair(rval=nil)
       x = rval||@gfq.rand
-      ki = @gamma**x
+      chi = @gamma**x
       if @debug_enable
         puts "  ** debug: create_key_pair",
              "    created private key x: #{x},",
-             "            public key ki=gamma**x: #{ki}",
+             "            public key chi=gamma**x: #{chi}",
              ""
       end
-      [x,ki]
+      [x,chi]
     end
     def make_signature(msg,x,rval=nil)
       z = @fz[msg]
@@ -42,18 +42,18 @@ module MyExample
       end
       [r,s]
     end
-    def verify_signature(msg,r,s,ki)
+    def verify_signature(msg,r,s,chi)
       z = @fz[msg]
       u1 = z/s
       u2 = r/s
-      omega=@gamma**u1*ki**u2
+      omega=@gamma**u1*chi**u2
       rd = @fp[omega]
       if @debug_enable
         puts "  ** debug: verify_signature",
              "    hash of msg ( #{msg} ) is #{z}",
              "    signature (r,s)=(#{r},#{s})",
              "    calculated u1=#{u1},u2=#{u2}",
-             "    gamma**u1*ki**u2=#{omega}",
+             "    gamma**u1*chi**u2=#{omega}",
              "    now r(derived)=#{rd}, which #{rd==r ? 'matches' : 'does not match'} r",
              ""
       end
