@@ -13,8 +13,8 @@ myelgamal=MyExample::ElgamalEncryptionEngine.new(
     raise "msg #{msg} is not in range 1..#{p_-1}" unless (1...p_)===msg
     FG_M.new(msg)
   },
-  ->myu{
-    myu.to_i
+  ->mu{
+    mu.to_i
   }
 )
 

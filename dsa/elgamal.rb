@@ -30,7 +30,7 @@ module MyExample
       save,@debug_enable = @debug_enable
 
       # message to a G-element translation
-      myu = @ft[msg] rescue
+      mu = @ft[msg] rescue
         raise(ArgumentError.new("failed to convert message #{msg} ( #{$!} )"))
 
       # Diffie-Hellman private shared value calculation
@@ -38,11 +38,11 @@ module MyExample
       kappa = chi**r
 
       # conversion
-      zeta2 = myu*kappa
+      zeta2 = mu*kappa
 
       if @debug_enable = save
         puts "  ** debug: encrypt",
-             "    translate msg = #{msg} to myu = #{myu},",
+             "    translate msg = #{msg} to mu = #{mu},",
              "    created random number (private key) r = #{r},",
              "    generated cipher #1 (public key) zeta1 = #{zeta1},",
              "    using DH shared value kappa = #{kappa},",
@@ -57,16 +57,16 @@ module MyExample
 
       # inversion
       kinv = kappa.inv
-      myu = zeta2*kinv
+      mu = zeta2*kinv
 
       # get message
-      msg = @ftinv[myu]
+      msg = @ftinv[mu]
       if @debug_enable
         puts "  ** debug: decrypt",
              "    cipher 1 / DH public key zeta1 = #{zeta1},",
              "    cipher 2 / main value zeta2 = #{zeta2},",
              "    DH shared value kappa = #{kappa}, and its inverse value = #{kinv},",
-             "    inverse to myu = #{myu},",
+             "    inverse to mu = #{mu},",
              "    translate inverse to decrypted message = #{msg}",
              ""
       end

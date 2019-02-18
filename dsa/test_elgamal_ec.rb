@@ -19,8 +19,8 @@ myelgamal=MyExample::ElgamalEncryptionEngine.new(
     }
     raise "failed to search an element on EC for #{msg}"
   },
-  ->myu{
-    myu.x.to_i/search_width
+  ->mu{
+    mu.x.to_i/search_width
   }
 )
 
