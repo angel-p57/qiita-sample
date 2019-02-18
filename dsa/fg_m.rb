@@ -16,7 +16,7 @@ module MyExample
           def inspect
             "\#<MG #{@n} mod #{self.class::P}>"
           end
-          private :+,:-,:/,:-@,:inv
+          private :+,:-,:/,:-@
           include Common
         }
       end
