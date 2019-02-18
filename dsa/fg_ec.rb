@@ -53,7 +53,11 @@ module MyExample
           # 曲線上にあるかどうかのチェックを省いて直にオブジェクトを生成する
           self.class.__send__(:new,x,y)
         end
-        alias * +
+        def -@
+          infinity? ? self : self.class.__send__(:new,@x,-@y)
+        end
+        alias :* :+
+        alias :inv :-@
         def to_s
           infinity? ? "(infinity)" : "(#{@x},#{@y})"
         end
