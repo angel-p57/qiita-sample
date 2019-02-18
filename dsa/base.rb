@@ -70,6 +70,34 @@ module MyExample
         raise ZeroDivisionError if g!=1
         self.class.new(x)
       end
+      # mod p での平方根 ( M. Cipolla のアルゴリズム )
+      # 平方根が存在しない場合は nil を返す
+      # see: http://yoshiiz.blog129.fc2.com/blog-entry-415.html
+      def sqrt
+        gfp=self.class
+        return nil unless Utils.legendre_symbol(@n,gfp::P)==1
+        romega=self.class.new(0)
+        while romega==0 || Utils.legendre_symbol(romega.to_i,gfp::P)!=-1
+          t=gfp.rand
+          romega=t*t-self
+        end
+        gfp2g=Class.new{
+          attr_reader :x,:y
+          def initialize(x,y)
+            @x,@y=x,y
+          end
+          def self.epsilon
+            new(self.class::GFP.new(1),self.class::GFP.new(0))
+          end
+          def *(elem)
+            self.class.new(@x*elem.x+@y*elem.y*self.class::ROMEGA,@x*elem.y+@y*elem.x)
+          end
+          include FiniteGroup::Common
+        }
+        gfp2g.const_set(:GFP,gfp)
+        gfp2g.const_set(:ROMEGA,romega)
+        (gfp2g.new(t,gfp.new(1))**(gfp::P/2+1)).x
+      end
       # 比較演算
       def ==(elem)
         to_i==elem.to_i
@@ -100,6 +128,19 @@ module MyExample
       end
       [a,x1,y1]
     end
-    module_function :egcd
+    # 平方剰余を判定するルジャンドル記号(0 or 1 or -1)を求める
+    # see: https://en.wikipedia.org/wiki/Legendre_symbol
+    def legendre_symbol(a,m)
+      t=1
+      until (a%=m).zero?
+        d=(a&-a).bit_length-1
+        a>>=d
+        t=-t if d.odd? && (m%8==3||m%8==5)
+        a,m=m,a
+        t=-t if a%4==3&&m%4==3
+      end
+      m==1 ? t : 0;
+    end
+    module_function :egcd, :legendre_symbol
   end
 end
