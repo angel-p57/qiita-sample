@@ -34,7 +34,7 @@ module MyExample
         raise(ArgumentError.new("failed to convert message #{msg} ( #{$!} )"))
 
       # Diffie-Hellman private shared value calculation
-      r,zeta1 = create_key_pair
+      r,zeta1 = create_key_pair(rval)
       kappa = chi**r
 
       # conversion
