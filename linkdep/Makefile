@@ -29,9 +29,11 @@ tdep2-db: tdep.o libtdep2.so libtbase.so
 	gcc -o $@ $< $(LDFLAGS) -ltdep2 -ltbase
 tdep2-bd: tdep.o libtdep2.so libtbase.so
 	gcc -o $@ $< $(LDFLAGS) -ltbase -ltdep2
+test-tdep1-bd-WA: tdep1-bd
+	@echo "** start $< ( workaround ) **"; env LD_PRELOAD=./libtdep1.so ./$<; echo "** end $< ( workaround ) **"; echo
 
 build: $(EXES)
-test: build test-tbase test-tdep1-db test-tdep1-bd test-tdep2-db test-tdep2-bd
+test: build test-tbase test-tdep1-db test-tdep1-bd test-tdep1-bd-WA test-tdep2-db test-tdep2-bd
 clean:
 	rm -f $(EXES) *.so *.o
 
