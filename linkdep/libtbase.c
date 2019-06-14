@@ -7,14 +7,9 @@ static bool lib_initialized = false;
 
 __attribute__((constructor))
 static void init(void) {
-  if ( lib_initialized ) {
-    puts("tbase: already initialized.");
-  }
-  else {
-    puts("tbase: initializing...");
-    lib_initialized = true;
-    puts("tbase: initialized.");
-  }
+  puts("tbase: initializing...");
+  lib_initialized = true;
+  puts("tbase: initialized.");
 }
 
 void use_tbase(void) {
