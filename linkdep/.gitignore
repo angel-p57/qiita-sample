@@ -1,4 +1,4 @@
 *.o
 *.so
 tbase
-tdep-*
+tdep?-*
