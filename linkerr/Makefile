@@ -1,8 +1,8 @@
 default: appok.exe appng.exe
 appok.exe: appok.o specific.o libcommon.a
-	gcc -o appok.exe appok.o specific.o -L. -lcommon
+	gcc $(LDFLAGS) -o appok.exe appok.o specific.o -L. -lcommon
 appng.exe: appng.o specific.o libcommon.a
-	gcc -o appng.exe appng.o specific.o -L. -lcommon
+	gcc $(LDFLAGS) -o appng.exe appng.o specific.o -L. -lcommon
 
 appok.o: appok.c
 	gcc -c -o appok.o appok.c
