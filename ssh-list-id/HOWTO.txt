@@ -1,0 +1,41 @@
+How to build new packages
+
+0. requirements
+  * CentOS 8 ( 8.1.1911 is preferred )
+  * download tools
+    wget, git, ... etc.
+  * some development packages
+    !! notice: some packages are in "PowerTools" repo, so you may enable it when installing them.
+    rpm-build, patch, gcc, make, autoconf, automake, perl-interpreter,
+    perl-generators, perl-podlators, util-linux, groff, audit-libs, xauth, gnupg2,
+    gtk2-devel, libX11-devel, gnome-libs-devel, openldap-devel,
+    zlib-devel, audit-libs-devel, pam-devel, fipscheck-devel,
+    openssl-devel, systemd-devel, p11-kit-devel, krb5-devel,
+    libedit-devel, ncurses-devel, libselinux-devel
+
+1. download source rpm
+  $ dnf download --source openssh-8.0p1-4.el8_1
+  or
+  $ wget http://vault.centos.org/8.1.1911/BaseOS/Source/SPackages/openssh-8.0p1-4.el8_1.src.rpm
+  or ... etc.
+
+2. download patches from github
+  $ wget https://github.com/angel-p57/qiita-sample/blob/master/ssh-list-id/openssh-8.0p1-ssh-list-id.patch
+  $ wget https://github.com/angel-p57/qiita-sample/blob/master/ssh-list-id/openssh.spec.8.0p1-4.el8_1.patch
+  or
+  $ git clone https://github.com/angel-p57/qiita-sample.git
+    -> patches are in "ssh-list-id" subdirectory.
+
+3. extrace source rpm
+  $ rpm -ivh openssh-8.0p1-4.el8_1.src.rpm
+    -> files are to extracted in ~/rpmbuild/{SOURCES,SPECS}
+
+4. apply the patch files
+  $ cp openssh-8.0p1-ssh-list-id.patch ~/rpmbuild/SOURCES/
+  $ cp openssh.spec.8.0p1-4.el8_1.patch ~/rpmbuild/SPECS/
+  $ cd ~/rpmbuild/SPECS
+  $ patch < openssh.spec.8.0p1-4.el8_1.patch
+
+5. rebuild openssh packages
+  $ rpmbuild -bb openssh.spec
+    -> new packages are saved in ~/rpmbuild/RPMS/

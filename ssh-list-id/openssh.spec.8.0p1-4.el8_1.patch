@@ -1,0 +1,53 @@
+--- openssh.spec.org	2020-02-05 00:58:10.000000000 +0900
++++ openssh.spec	2020-05-07 22:58:08.007131177 +0900
+@@ -66,7 +66,7 @@
+ 
+ # Do not forget to bump pam_ssh_agent_auth release if you rewind the main package release to 1
+ %global openssh_ver 8.0p1
+-%global openssh_rel 4
++%global openssh_rel 4.1
+ %global pam_ssh_agent_ver 0.10.3
+ %global pam_ssh_agent_rel 7
+ 
+@@ -218,6 +218,8 @@
+ Patch965: openssh-8.0p1-openssl-pem.patch
+ # Seed from dev/random if requested (#1785655)
+ Patch966: openssh-8.0p1-entropy.patch
++# add ssh-list-id
++Patch967: openssh-8.0p1-ssh-list-id.patch
+ 
+ License: BSD
+ Group: Applications/Internet
+@@ -434,6 +436,7 @@
+ %patch964 -p1 -b .openssl-kdf
+ %patch965 -p1 -b .openssl-pem
+ %patch966 -p1 -b .entropy
++%patch967 -p1 -b .ssh-list-id
+ 
+ %patch200 -p1 -b .audit
+ %patch201 -p1 -b .audit-race
+@@ -631,6 +634,7 @@
+ getent passwd sshd >/dev/null || \
+   useradd -c "Privilege-separated SSH" -u %{sshd_uid} -g sshd \
+   -s /sbin/nologin -r -d /var/empty/sshd sshd 2> /dev/null || :
++getent group ssh_conf >/dev/null || groupadd -r ssh_conf || :
+ 
+ %post server
+ %systemd_post sshd.service sshd.socket
+@@ -690,7 +694,7 @@
+ %attr(0644,root,root) %{_mandir}/man5/moduli.5*
+ %attr(0644,root,root) %{_mandir}/man8/sshd.8*
+ %attr(0644,root,root) %{_mandir}/man8/sftp-server.8*
+-%attr(0600,root,root) %config(noreplace) %{_sysconfdir}/ssh/sshd_config
++%attr(0640,root,ssh_conf) %config(noreplace) %{_sysconfdir}/ssh/sshd_config
+ %attr(0644,root,root) %config(noreplace) /etc/pam.d/sshd
+ %attr(0640,root,root) %config(noreplace) /etc/sysconfig/sshd
+ %attr(0644,root,root) %{_unitdir}/sshd.service
+@@ -699,6 +703,7 @@
+ %attr(0644,root,root) %{_unitdir}/sshd-keygen@.service
+ %attr(0644,root,root) %{_unitdir}/sshd-keygen.target
+ %attr(0644,root,root) %{_tmpfilesdir}/openssh.conf
++%attr(2711,root,ssh_conf) %{_bindir}/ssh-list-id
+ %endif
+ 
+ %if %{ldap}
