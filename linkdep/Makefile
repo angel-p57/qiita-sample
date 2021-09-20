@@ -19,8 +19,6 @@ libtdep1.so: libtdep.o
 	gcc -o $@ -shared $<
 libtdep2.so: libtdep.o libtbase.so
 	gcc -o $@ -shared $< $(LDFLAGS) -ltbase
-tbase: tbase.o libtbase.so
-	gcc -o $@ $< $(LDFLAGS) -ltbase
 tdep1-db: tdep.o libtdep1.so libtbase.so
 	gcc -o $@ $< $(LDFLAGS) -ltdep1 -ltbase
 tdep1-bd: tdep.o libtdep1.so libtbase.so
@@ -40,5 +38,4 @@ clean:
 # dependencies
 libtbase.o: tbase.h
 libtdep.o: tdep.h tbase.h
-tbase.o: tbase.h
 tdep.o: tdep.h
