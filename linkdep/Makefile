@@ -19,13 +19,13 @@ libtdep1.so: libtdep.o
 	gcc -o $@ -shared $<
 libtdep2.so: libtdep.o libtbase.so
 	gcc -o $@ -shared $< $(LDFLAGS) -ltbase
-tdep1-db: tdep.o libtdep1.so libtbase.so
+tdep1-db: main.o libtdep1.so libtbase.so
 	gcc -o $@ $< $(LDFLAGS) -ltdep1 -ltbase
-tdep1-bd: tdep.o libtdep1.so libtbase.so
+tdep1-bd: main.o libtdep1.so libtbase.so
 	gcc -o $@ $< $(LDFLAGS) -ltbase -ltdep1
-tdep2-db: tdep.o libtdep2.so libtbase.so
+tdep2-db: main.o libtdep2.so libtbase.so
 	gcc -o $@ $< $(LDFLAGS) -ltdep2 -ltbase
-tdep2-bd: tdep.o libtdep2.so libtbase.so
+tdep2-bd: main.o libtdep2.so libtbase.so
 	gcc -o $@ $< $(LDFLAGS) -ltbase -ltdep2
 test-tdep1-bd-WA: tdep1-bd
 	@echo "** start $< ( workaround ) **"; env LD_PRELOAD=./libtdep1.so ./$<; echo "** end $< ( workaround ) **"; echo
@@ -38,4 +38,4 @@ clean:
 # dependencies
 libtbase.o: tbase.h
 libtdep.o: tdep.h tbase.h
-tdep.o: tdep.h
+main.o: tdep.h
