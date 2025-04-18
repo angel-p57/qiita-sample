@@ -110,7 +110,7 @@ def randSmallPrime(pinf,psup)
     }
 end
 
-def randSmallPrimeNBit(n)
+def randSmallPrimeNbit(b)
     inf=1<<(b-1)
     randSmallPrime(inf,inf<<1)
 end
